@@ -1,33 +1,24 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
-	"os"
+	"myapp/datafile"
 )
 
 func main() {
+	numbers, err := datafile.GetFloats("data.txt") // створюємо змінні і викликаємо файл, за методом getfloats, посилаючись на наш файл -data.txt
 
-	file, err := os.Open("data.txt")
-	// створюємо змінні, щоб зберігати туди помилку відкриття файлу
-	if err != nil { //код помилки( перевірка на помилку)
+	if err != nil {
 		log.Fatal(err)
 	}
-	//сканер нашого файлу
-	scanner := bufio.NewScanner(file)
 
-	for scanner.Scan() {
-		// сканер для перевірки файлу по рядках
-		fmt.Println(scanner.Text()) //викликаємо у вигляді тексту наш файл через сканер
-	}
+	var sum float64 = 0 // змінна де буде зберігатись сума, і за замовчуванням вона = 0
 
-	err = file.Close() // закриваємо файл
+	for _, number := range numbers {
+		sum += number
+	}
+	count := float64(len(numbers))
+	fmt.Print(sum / count)
 
-	if err != nil { //код помилки( перевірка на помилку)
-		log.Fatal(err)
-	}
-	if scanner.Err() != nil { // робимо перевірку на випадок помилки при скануванні
-		log.Fatal(scanner.Err())
-	}
 }
